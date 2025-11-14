@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+android {
+    namespace 'com.scheduler' // Matches the package name in your Kotlin files
+    compileSdk 34 // Compile against a modern SDK version
+
+    defaultConfig {
+        applicationId "com.scheduler.contactkeeper"
+        minSdk 26 // Required for java.time (Instant/Duration) desugaring
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        // Enable Java 8 features (required for java.time.* used in your Kotlin files)
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    // AndroidX Core and UI libraries
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+
+    // Kotlin Coroutines for Worker
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+
+    // WorkManager dependencies (with Kotlin Extensions)
+    implementation "androidx.work:work-runtime-ktx:2.9.0"
+
+    // Gson dependency for serialization (used in MainActivity and Worker)
+    implementation "com.google.code.gson:gson:2.10.1"
+
+    // Java 8 desugaring (allows using java.time.* on older Android versions)
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    
+    // Testing dependencies (standard)
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
