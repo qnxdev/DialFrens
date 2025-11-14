@@ -1,8 +1,39 @@
-<uses-permission android:name="android.permission.CALL_PHONE"/>
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-3.  **Add Dependencies:** Make sure your `app/build.gradle` file includes dependencies for **WorkManager** and **Gson** (as used in the Kotlin files):
-```groovy
-implementation("androidx.work:work-runtime-ktx:2.9.0")
-implementation("com.google.code.gson:gson:2.10.1")
-// If using Instant/Duration (Java 8 features), you need:
-coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- REQUIRED PERMISSIONS -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Contact Keeper"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- WorkManager setup (usually handled by the library, but good to ensure compatibility) -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
+    </application>
+</manifest>
