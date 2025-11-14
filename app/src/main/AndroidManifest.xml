@@ -1,0 +1,8 @@
+<uses-permission android:name="android.permission.CALL_PHONE"/>
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+3.  **Add Dependencies:** Make sure your `app/build.gradle` file includes dependencies for **WorkManager** and **Gson** (as used in the Kotlin files):
+```groovy
+implementation("androidx.work:work-runtime-ktx:2.9.0")
+implementation("com.google.code.gson:gson:2.10.1")
+// If using Instant/Duration (Java 8 features), you need:
+coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
