@@ -30,13 +30,11 @@ jobs:
       # 2. Grant execution permissions to Gradle wrapper (Crucial for CI)
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
-        # working-directory: ./app # Assuming gradlew is accessible relative to app/
     
       # 3. Build the Debug APK using Gradle
       # We use 'assembleDebug' as it doesn't require complex signing keys, making it fast and reliable for CI.
       - name: Build Debug APK
         run: ./gradlew assembleDebug
-        working-directory: ./app # Assuming app/ contains the build.gradle and src/
     
       # 4. Upload the generated APK artifact
       - name: Upload APK artifact
