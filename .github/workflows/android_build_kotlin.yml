@@ -7,7 +7,7 @@ on:
   pull_request:  
     branches: 
     - main
-  workflow_dispatch: # Allows manual trigger directly from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,28 +17,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
     
-      # 1. Setup Java for Gradle
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
-      # 1.5. DEBUG STEP: List files in the root directory - ***CRITICAL for seeing gradlew***
-      - name: Debug List Files in Root
-        run: ls -a
 
-      # 2. Grant execution permissions to Gradle wrapper (Crucial for CI)
       - name: Grant execute permission to gradlew
-        run: |
-         chmod +x ./gradlew
-         rm -rf ~/.gradle/wrapper/dists
+        run: chmod +x ./gradlew
+
+      - name: Clean gradle wrapper cache
+        run: rm -rf ~/.gradle/wrapper
+
+      - name: Build Debug APK with detailed output
+        run: ./gradlew assembleDebug --stacktrace --info
     
-      # 3. Build the Debug APK using Gradle
-      # We use 'assembleDebug' as it doesn't require complex signing keys, making it fast and reliable for CI.
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug
-    
-      # 4. Upload the generated APK artifact
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
