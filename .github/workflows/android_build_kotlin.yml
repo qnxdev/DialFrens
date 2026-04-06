@@ -23,14 +23,22 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Regenerate Gradle Wrapper with Docker
+        run: docker run --rm -v $(pwd):/workspace -w /workspace gradle:8.2 gradle wrapper --gradle-version 8.2
+
+      - name: Commit and push gradle wrapper
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add gradle/wrapper/gradle-wrapper.jar gradle/wrapper/gradle-wrapper.properties
+          git commit -m "Regenerate gradle wrapper" || echo "No changes to commit"
+          git push origin main || echo "Nothing to push"
+
       - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
 
-      - name: Clean gradle wrapper cache
-        run: rm -rf ~/.gradle/wrapper
-
-      - name: Build Debug APK with detailed output
-        run: ./gradlew assembleDebug --stacktrace --info
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
     
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
